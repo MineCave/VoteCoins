@@ -1,4 +1,5 @@
 prefix: '&f[&6VC&f]&r'
+debug: false
 sort votetop interval: 5
 coins message: '<prefix> You have &6<coins> &fcoins.'
 purchase successful message: '<prefix> Purchase successful! <coins message>'

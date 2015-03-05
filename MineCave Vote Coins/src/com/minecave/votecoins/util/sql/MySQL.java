@@ -40,9 +40,6 @@ public class MySQL {
 				if (b) {
 					rs = statement.getResultSet();
 					while (rs.next()) {
-						String uuidStat = rs.getString(1);
-						if (!uuidStat.equals(uuid))
-							continue;
 						stat = rs.getObject(query);
 					}
 				}

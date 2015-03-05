@@ -38,7 +38,7 @@ public class CoinManager {
 		sortedMonth = new TreeSet<Map.Entry<String, Integer>>();
 		sortedAllTime = new TreeSet<Map.Entry<String, Integer>>();
 		
-		startOrdering(plugin.getConfig().getInt("sort votetop interval") * 20);
+		startOrdering(plugin.getConfig().getInt("sort votetop interval") * 20 * 60);
 	}
 	
 	public void sendMessage(final Player player, final String message, final Table votes) {
@@ -102,7 +102,6 @@ public class CoinManager {
 						@Override
 						protected void done() {
 							int oldAmount = result == null ? 0 : (int) result;
-							Bukkit.broadcastMessage("oldAmount: " + oldAmount);
 							new SQLSet(uuid, "votecoins", oldAmount + amount, votes);
 						}
 					};
@@ -247,188 +246,6 @@ public class CoinManager {
 		}
 	}
 	
-	/*private Main plugin;
-	private FileConfiguration votes;
-	private ConfigurationSection coinSection, voteSectionDay, voteSectionMonth, voteSectionAllTime, tracking;
-	private Map<String, Integer> coins, day, month, allTime;
-	private Calendar calendar = Calendar.getInstance();
-	
-	public CoinManager(Main plugin) {
-		this.plugin = plugin;
-		votes = plugin.getVotes();
-		
-		if (!votes.contains("coins"))
-			votes.createSection("coins");
-		if (!votes.contains("votes.tracking"))
-			votes.createSection("votes.tracking");
-		if (!votes.contains("votes.all time"))
-			votes.createSection("votes.all time");
-		if (!votes.contains("votes.month"))
-			votes.createSection("votes.month");
-		if (!votes.contains("votes.day"))
-			votes.createSection("votes.day");
-		
-		plugin.saveVotes();
-		
-		coinSection = votes.getConfigurationSection("coins");
-		tracking = votes.getConfigurationSection("votes.tracking");
-		voteSectionDay = votes.getConfigurationSection("votes.day");
-		voteSectionMonth = votes.getConfigurationSection("votes.month");
-		voteSectionAllTime = votes.getConfigurationSection("votes.all time");
-		
-		initTracking();
-	}
-	*/
-	/**
-	 * Gets the amount of vote coins a player has.
-	 * @param player the Player object of the player
-	 * @param type the type of vote, for example COINS, MONTHLY, ALL_TIME, etc...
-	 * @return the amount of vote coins the player has
-	 *//*
-	public int getVotes(Player player, VoteType type) {
-		return getVotes(player.getUniqueId().toString(), type);
-	}
-	*/
-	/**
-	 * Gets the amount of vote coins a player has.
-	 * @param uuid the unique identifier of the player (as a String)
-	 * @param type the type of vote, for example COINS, MONTHLY, ALL_TIME, etc...
-	 * @return the amount of vote coins the player has
-	 *//*
-	public int getVotes(String uuid, VoteType type) {
-		switch (type) {
-		case COINS:
-			return (coinSection.contains(uuid) ? coinSection.getInt(uuid) : 0);
-		case ALL_TIME:
-			return (voteSectionAllTime.contains(uuid) ? voteSectionAllTime.getInt(uuid) : 0);
-		case MONTH:
-			return (voteSectionMonth.contains(uuid) ? voteSectionMonth.getInt(uuid) : 0);
-		case DAY:
-			return (voteSectionDay.contains(uuid) ? voteSectionDay.getInt(uuid) : 0);
-		default:
-			return -1;
-		}
-	}*/
-	
-	/**
-	 * Adds votes (or coins) to a player.
-	 * @param player the Player object of the player
-	 * @param amount the amount of coins or votes will be added to the player's balance
-	 * @param type the type of vote, for example COINS, MONTHLY, ALL_TIME, etc...
-	 *//*
-	public void addVotes(Player player, int amount, VoteType type) {
-		addVotes(player.getUniqueId().toString(), amount, type);
-	}
-	*/
-	/**
-	 * Adds votes (or coins) to a player.
-	 * @param player the Player object of the player
-	 * @param amount the amount of coins or votes will be added to the player's balance
-	 * @param type the type of vote, for example COINS, MONTHLY, ALL_TIME, etc...
-	 *//*
-	public void addVotes(String uuid, int amount, VoteType type) {
-		switch (type) {
-		case COINS:
-			coinSection.set(uuid, getVotes(uuid, type) + amount);
-			break;
-		case ALL_TIME:
-			checkReward(uuid, getVotes(uuid, type), amount);
-			voteSectionAllTime.set(uuid, getVotes(uuid, type) + amount);
-			voteSectionMonth.set(uuid, getVotes(uuid, VoteType.MONTH) + amount);
-			voteSectionDay.set(uuid, getVotes(uuid, VoteType.DAY) + amount);
-			break;
-		case MONTH:
-			checkReward(uuid, getVotes(uuid, type), amount);
-			voteSectionMonth.set(uuid, getVotes(uuid, type) + amount);
-			voteSectionAllTime.set(uuid, getVotes(uuid, VoteType.ALL_TIME) + amount);
-			voteSectionDay.set(uuid, getVotes(uuid, VoteType.DAY) + amount);
-			break;
-		case DAY:
-			checkReward(uuid, getVotes(uuid, type), amount);
-			voteSectionDay.set(uuid, getVotes(uuid, type) + amount);
-			voteSectionMonth.set(uuid, getVotes(uuid, VoteType.MONTH) + amount);
-			voteSectionAllTime.set(uuid, getVotes(uuid, VoteType.ALL_TIME) + amount);
-			break;
-		}
-		plugin.saveVotes();
-	}*/
-	
-	/**
-	 * Tries to update the votes based on the time.
-	 * For example, votes from yesterday will be added to today if it's the last day saved in the config is before this day.
-	 *//*
-	public void checkUpdate() {
-		String[] lastUpdate = tracking.getString("last update").split(",");
-		String[] currentTime = serializeDate().split(",");
-		int lastUpdateDay = Integer.parseInt(lastUpdate[0]);
-		int lastUpdateMonth = Integer.parseInt(lastUpdate[1]);
-		int currentTimeDay = Integer.parseInt(currentTime[0]);
-		int currentTimeMonth = Integer.parseInt(currentTime[1]);
-		
-		if (lastUpdateDay != currentTimeDay) 						// At least one day has passed since the votes were last updated.
-			votes.set("votes.tracking.day", "");						// Reset today's votes.
-		
-		if (lastUpdateMonth != currentTimeMonth)						// At least one month has passed since the votes were last updated.
-			votes.set("votes.tracking.month", "");					// Reset this month's votes.
-		
-		tracking.set("last update", serializeDate());				// Update the last update section in the tracking file.
-		plugin.saveVotes();
-	}
-	
-	public SortedSet<Map.Entry<String, Integer>> getTop(VoteType type) {
-		switch (type) {
-		case COINS:
-			if (coins == null)
-				coins = Maps.newHashMap();
-			addAll(coins, coinSection);
-			return sort(coins);
-		case DAY:
-			if (day == null)
-				day = Maps.newHashMap();
-			addAll(day, voteSectionDay);
-			return sort(day);
-		case MONTH:
-			if (month == null)
-				month = Maps.newHashMap();
-			addAll(month, voteSectionMonth);
-			return sort(month);
-		case ALL_TIME:
-			if (allTime == null)
-				allTime = Maps.newHashMap();
-			addAll(allTime, voteSectionAllTime);
-			return sort(allTime);
-		default:
-			if (month == null)
-				month = Maps.newHashMap();
-			addAll(month, voteSectionMonth);
-			return sort(month);
-		}
-	}
-	
-	private void addAll(Map<String, Integer> map, ConfigurationSection section) {
-		for (String uuid : section.getKeys(false)) {
-			map.put(uuid, section.getInt(uuid));
-		}
-	}
-	
-	private void initTracking() {
-		if (!tracking.contains("start"))
-			tracking.set("start", serializeDate());
-		if (!tracking.contains("last update"))
-			tracking.set("last update", serializeDate());
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				checkUpdate();
-			}
-		}.runTaskTimer(plugin, 1l, 20l * 60 * 60);
-		plugin.saveVotes();
-	}
-	
-	private String serializeDate() {
-		return calendar.get(Calendar.DAY_OF_MONTH) + "," + calendar.get(Calendar.MONTH) + "," + calendar.get(Calendar.YEAR);
-	}
-	*/
 	private <K,V extends Comparable<? super V>> SortedSet<Map.Entry<K,V>> sort(Map<K,V> map) {
 		SortedSet<Map.Entry<K, V>> sortedEntries = new TreeSet<Map.Entry<K, V>>(
 				new Comparator<Map.Entry<K, V>>() {
@@ -443,6 +260,8 @@ public class CoinManager {
 	}
 	
 	private void checkReward(String uuid, int original, int addition) {
+		long start = System.currentTimeMillis();
+		
 		int total = original + addition;
 		for (String s : plugin.getConfig().getConfigurationSection("rewards").getKeys(false)) {
 			int value = Integer.parseInt(s);
@@ -453,6 +272,10 @@ public class CoinManager {
 				player.sendMessage(colorize(reward.getString("message").replaceAll("<player>", player.getName())));
 			}
 		}
+		
+		long end = System.currentTimeMillis();
+		
+		Main.plugin.debug("time to check reward: " + (end - start));
 	}
 	
 	private void executeCommands(Player player, String[] commands) {
@@ -461,7 +284,7 @@ public class CoinManager {
 		}
 	}
 	
-	private static String colorize(String input) {
+	private String colorize(String input) {
 		return ChatColor.translateAlternateColorCodes('&', input);
 	}
 }

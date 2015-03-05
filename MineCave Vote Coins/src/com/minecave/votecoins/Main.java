@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -50,7 +51,9 @@ public class Main extends JavaPlugin implements Listener {
 	private List<String> voteTopAllTime;
 	
 	private List<String> day, month, allTime;
-
+	
+	private boolean debug;
+	
 	@Override
 	public void onEnable() {
 		plugin = this;
@@ -79,8 +82,7 @@ public class Main extends JavaPlugin implements Listener {
 		month = Lists.newArrayList();
 		allTime = Lists.newArrayList();
 		
-		//if (!Votifier.getInstance().getListeners().contains(this))
-		//	Votifier.getInstance().getListeners().add(this);
+		debug = getConfig().getBoolean("debug");
 	}
 	
 	@Override
@@ -186,6 +188,8 @@ public class Main extends JavaPlugin implements Listener {
 				}.runTaskAsynchronously(this);
 			}
 			
+			debug("pending tasks: " + getServer().getScheduler().getPendingTasks().size());
+			debug("active threads: " + Thread.activeCount());
 			coins.sendMessage(player, coinMessage, votes);
 			return true;
 		} else if (command.getName().equalsIgnoreCase("vcshop")) {
@@ -235,35 +239,13 @@ public class Main extends JavaPlugin implements Listener {
 			
 			sendTop(sender, VoteType.MONTH);
 			return true;
-		} /*else if (command.getName().equalsIgnoreCase("coinaddvotelistener")) {
-			if (!sender.hasPermission("lactem.coinaddvotelistener")) {
-				sender.sendMessage("No permission!");
-				return true;
-			}
-			
-			if (args.length > 0 && args[0].equalsIgnoreCase("force")) {
-				Votifier.getInstance().getListeners().add(this);
-				sender.sendMessage("Listener forcefully added.");
-			} else
-				if (!Votifier.getInstance().getListeners().contains(this)) {
-					Votifier.getInstance().getListeners().add(this);
-					sender.sendMessage("Listener was not present. Added.");
-				} else {
-					sender.sendMessage("Listener was already present. Nothing was added.");
-				}
-		}*/
+		}
 		return true;
 	}
 	
-	/*@Override
-	public void voteMade(Vote vote) {
-		String uuid = getServer().getPlayer(vote.getUsername()).getUniqueId().toString();
-		coins.addVotes(uuid, 1, VoteType.COINS);
-		coins.addVotes(uuid, 1, VoteType.DAY);
-	}*/
-	
 	@EventHandler
 	public void onVote(VotifierEvent event) {
+		debug("A vote was received and is being handled.");
 		addVote(event.getVote());
 	}
 	
@@ -291,20 +273,13 @@ public class Main extends JavaPlugin implements Listener {
 	}
 	
 	private void addVote(final Vote vote) {
-		/*
-		if (player == null || !player.isOnline())
-			toReward.add(event.getVote());
-		else {
-			String uuid = player.getUniqueId().toString();
-			coins.addVotes(uuid, 1, VoteType.COINS);
-			coins.addVotes(uuid, 1, VoteType.DAY);
-		}*/
-		
 		final Player player = Bukkit.getPlayer(vote.getUsername());
 		
 		if (player == null || !player.isOnline()) {
+			debug("Adding vote for player " + player.getName());
 			toReward.add(vote);
 		} else {
+			debug("Storing vote to add when a player is online.");
 			coins.add(player, vote, votes, voteTracking);
 		}
 	}
@@ -342,6 +317,15 @@ public class Main extends JavaPlugin implements Listener {
 	
 	public Table getVoteTracking() {
 		return voteTracking;
+	}
+	
+	public boolean debug() {
+		return debug;
+	}
+	
+	public void debug(String message) {
+		if (debug())
+			getLogger().log(Level.WARNING, "[debug]" + " " + message);
 	}
 	
 	private String colorize(String input) {
@@ -384,39 +368,8 @@ public class Main extends JavaPlugin implements Listener {
 		}
 	}
 	
-	/*private void sendTop(final CommandSender sender, final SortedSet<Map.Entry<String, Integer>> set, final List<String> stringList) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				for (String s : stringList) {
-					int repeat = s.contains("<x") ? Integer.valueOf(s.split("<x")[1].replace(">", "")) : 1;
-					Iterator<Entry<String, Integer>> iterator = set.iterator();
-					for (int i = 0; i < repeat; i++) {
-						if (!iterator.hasNext())
-							return;
-						Entry<String, Integer> next = iterator.next();
-						try {
-							UUID uuid = UUID.fromString(next.getKey());
-							sender.sendMessage(colorize(s.
-									replaceAll("<#>", i + 1 + "").
-									replaceAll("<name>", new NameFetcher(uuid).call().get(uuid)).
-									replaceAll("<votes>", next.getValue() + "").
-									replaceAll("<x" + repeat + ">", "")));
-						} catch (Exception e) {
-							e.printStackTrace();
-							sender.sendMessage(colorize(s.
-									replaceAll("<#>", i + 1 + "").
-									replaceAll("<name>", "unknown").
-									replaceAll("<votes>", next.getValue() + "").
-									replaceAll("<x" + repeat + ">", "")));
-						}
-					}
-				}
-			}
-		}.runTaskAsynchronously(this);
-	}*/
-	
 	public void makeVoteTop() {
+		debug("Making vote top...");
 		new BukkitRunnable() {
 			@Override
 			public void run() {
