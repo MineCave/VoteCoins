@@ -95,6 +95,12 @@ public class Main extends JavaPlugin implements Listener {
 			
 			final Player player = (Player) sender;
 			
+			if (args.length > 0 && player.isOp() && args[0].equalsIgnoreCase("debug")) {
+				debug = !debug;
+				player.sendMessage("Debug set to: " + ChatColor.GOLD + debug);
+				return true;
+			}
+			
 			if (args.length > 0 && player.isOp() && args[0].equalsIgnoreCase("give")) {
 				if (args.length < 3) {
 					player.sendMessage(colorize(prefix + " " + "&4Invalid syntax! Correct syntax: &2/vc give <player> <amount> [votes]"));
