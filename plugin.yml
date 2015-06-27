@@ -1,0 +1,16 @@
+name: VoteCoins
+version: 1.0
+author: Lactem
+main: com.minecave.votecoins.Main
+depend: [Votifier]
+commands:
+  votecoins:
+    aliases: [votecoin, vc]
+  vcshop:
+    aliases: [votecoinshop, coinshop]
+  rewards:
+    aliases: []
+  vote:
+    aliases: []
+  votetop:
+    aliases: [vtop]

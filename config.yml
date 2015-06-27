@@ -1,0 +1,268 @@
+prefix: '&9&l[&6&lVC&9&l]'
+coins message: '<prefix> &6&lYou have &c&l<coins> &6&lcoins.'
+purchase successful message: '<prefix> &bPurchase successful! <coins message>'
+sort votetop interval: 5
+debug: true
+messages:
+  vote:
+  - '&6&m-------------&8[&b&l VoteLink &8]&6&m--------------'
+  - ''
+  - '&6&m-[]-&a  http://minecave.com/vote.html  &6&m-[]-'
+  - ''
+  - '&6&m-------------&8[&b&l VoteLink &8]&6&m--------------'
+  rewards:
+  - '&6&m--------- &8[&b&l Vote Rewards &8]&6&m---------'
+  - '&c&l5 &b&lVotes &6&l- &a&l2 Mystery Chest'
+  - '&c&l10 &b&lVotes &6&l- &a&l3 Mystery Chest'
+  - '&c&l15 &b&lVotes &6&l- &a&l10bil'
+  - '&c&l20 &b&lVotes &6&l- &a&l4 Mystery Chest'
+  - '&c&l25 &b&lVotes &6&l- &a&l5 Mystery Chest'
+  - '&c&l30 &b&lVotes &6&l- &a&lLucky Armor'
+  - '&c&l35 &b&lVotes &6&l- &a&l50bil'
+  - '&c&l40 &b&lVotes &6&l- &a&l6 Mystery Chest'
+  - '&c&l45 &b&lVotes &6&l- &a&l7 Mystery Chest'
+  - '&c&l50 &b&lVotes &6&l- &a&l100bil'
+  - '&c&l60 &b&lVotes &6&l- &a&lLucky Armor'
+  - '&c&l70 &b&lVotes &6&l- &a&l8 Mystery Chest'
+  - '&c&l80 &b&lVotes &6&l- &a&l150bil'
+  - '&c&l90 &b&lVotes &6&l- &a&l9 Mystery Chest'
+  - '&c&l100 &b&lVote &6&l- &a&l250bil'
+  - '&c&l125 &b&lVote &6&l- &a&l10 Mystery Chest'
+  - '&c&l175 &b&lVote &6&l- &a&l10 Mystery Chest'
+  - '&c&l200 &b&lVote &6&l- &a&l500bil'
+  - '&6&m---- &8[&b&l Mystery Chest Rewards &8]&6&m----'
+  - '&c&l1/3 &6&l- &a&l1Mil'
+  - '&c&l1/6 &6&l- &a&l5Mil'
+  - '&c&l1/8 &6&l- &a&l10Mil'
+  - '&c&l1/12 &6&l- &a&l50Mil'
+  - '&c&l1/20 &6&l- &a&l100Mil'
+  - '&c&l1/40 &6&l- &a&l1Bil'
+  - '&c&l1/70 &6&l- &a&l10Bil'
+  - '&c&l1/200 &6&l- &a&l100Bil'
+  - '&c&l1/1000 &6&l- &a&l250Bil'
+  - '&c&l1/10 &6&l- &a&l15Pick'
+  - '&c&l1/30 &6&l- &a&l40Pick'
+  - '&c&l1/26 &6&l- &a&lLucky Armor'
+  - '&c&l1/1000 &6&l- &a&lVote Nuker'
+  - '&c&lType &b&l/vote &c&lfor the Link'
+
+  votetop:
+    day:
+    - '&6&l---------- &6&lTop Voters &c&lToday &6&l----------'
+    - '&c&l<#>. &a<name> &c&l- &a<votes> <x5>'
+    month:
+    - '&6&l---------- &6&lTop Voters This &c&lMonth &6&l----------'
+    - '&c&l<#>. &a<name> &c&l- &a<votes> <x10>'
+    all time:
+    - '&6&l---------- &6&lTop Voters of &c&lAll Time &6&l----------'
+    - '&c&l<#>. &a<name> &c&l- &a<votes> <x15>'
+rewards:
+  5:
+    commands: votechests give <player> 2
+    message: You have received a reward 2 Mystery Chest for voting 5 times. Enjoy!
+  10:
+    commands: votechests give <player> 3
+    message: You have received a reward 3 Mystery Chest for voting 10 times. Enjoy!
+  15:
+    commands: money give <player> 10000000000
+    message: You have received a reward 10Bil for voting 15 times. Enjoy!
+  20:
+    commands: votechests give <player> 4
+    message: You have received a reward 4 Mystery Chest for voting 20 times. Enjoy!
+  25:
+    commands: votechests give <player> 5
+    message: You have received a reward 5 Mystery Chest for voting 25 times. Enjoy!
+  30:
+    commands: kit lucky-armor <player>
+    message: You have received a reward Lucky Armor for voting 30 times. Enjoy!
+  35:
+    commands: money give <player> 50000000000
+    message: You have received a reward 50Bil for voting 35 times. Enjoy!
+  40:
+    commands: votechests give <player> 6
+    message: You have received a reward 6 Mystery Chest for voting 40 times. Enjoy!
+  45:
+    commands: votechests give <player> 7
+    message: You have received a reward 7 Mystery Chest for voting 45 times. Enjoy!
+  50:
+    commands: money give <player> 100000000000
+    message: You have received a reward 100Bil for voting 50 times. Enjoy!
+  60:
+    commands: kit lucky-armor <player>
+    message: You have received a reward Lucky Armor for voting 60 times. Enjoy!
+  70:
+    commands: votechests give <player> 8
+    message: You have received a reward 8 Mystery Chest for voting 70 times. Enjoy!
+  80:
+    commands: money give <player> 150000000000
+    message: You have received a reward 150Bil for voting 80 times. Enjoy!
+  90:
+    commands: votechests give <player> 9
+    message: You have received a reward 9 Mystery Chest for voting 90 times. Enjoy!
+  100:
+    commands: money give <player> 250000000000
+    message: You have received a reward 250Bil for voting 100 times. Enjoy!
+  125:
+    commands: votechests give <player> 10
+    message: You have received a reward 10 Mystery Chest for voting 125 times. Enjoy!
+  175:
+    commands: votechests give <player> 10
+    message: You have received a reward 10 Mystery Chest for voting 175 times. Enjoy!
+  200:
+    commands: money give <player> 500000000000
+    message: You have received a reward 500Bil for voting 200 times. Enjoy!
+
+shop:
+  title: '&6MineCaveMC &4Vote Coin Shop'
+  size: 36
+  slots:
+    1:
+      commands: kit 10pick <player>
+      permissions: votechests.shop
+      cost: 50
+      item:
+        name: '&b&l10 Pickaxe &6&l<cost> coins'
+        item: 'diamond_pickaxe:1'
+        lore:
+        - Click to buy the 10 Pickaxe.
+    2:
+      commands: kit 25pick <player>
+      permissions: votechests.shop
+      cost: 125
+      item:
+        name: '&b&l25 Pickaxe &6&l<cost> coins'
+        item: 'diamond_pickaxe:1'
+        lore:
+        - Click to buy the 25 Pickaxe.
+    3:
+      commands: kit 50pick <player>
+      permissions: votechests.shop
+      cost: 250
+      item:
+        name: '&b&l50 Pickaxe &6&l<cost> coins'
+        item: 'diamond_pickaxe:1'
+        lore:
+        - Click to buy the 50 Pickaxe.
+    4:
+      commands: kit 100pick <player>
+      permissions: votechests.shop
+      cost: 500
+      item:
+        name: '&b&l100 Pickaxe &6&l<cost> coins'
+        item: 'diamond_pickaxe:1'
+        lore:
+        - Click to buy the 100 Pickaxe.
+    5:
+      commands: nukerpicks give <player> start
+      permissions: votechests.shop
+      cost: 600
+      item:
+        name: '&6&l&klll &b&lNuker Pick &6&l&klll &6&l<cost> coins'
+        item: 'diamond_pickaxe:1'
+        lore:
+        - Click to buy the Nuker Pickaxe.
+    10:
+      commands: kit god-armor <player>
+      permissions: votechests.shop
+      cost: 200
+      item:
+        name: '&b&lGod Armor &6&l<cost> coins'
+        item: 'diamond_chestplate:1'
+        lore:
+        - Click to buy the God Armor.
+    11:
+      commands: kit god-weapons <player>
+      permissions: votechests.shop
+      cost: 200
+      item:
+        name: '&b&lGod Weapons &6&l<cost> coins'
+        item: 'diamond_sword:1'
+        lore:
+        - Click to buy the God Weapons.
+    19:
+      commands: kit coal <player>
+      permissions: votechests.shop
+      cost: 60
+      item:
+        name: '&8&lCoal Kit &6&l<cost> coins'
+        item: 'diamond_helmet:1'
+        lore:
+        - Click to buy the Coal Kit.
+    20:
+      commands: kit Iron <player>
+      permissions: votechests.shop
+      cost: 75
+      item:
+        name: '&7&lIron Kit &6&l<cost> coins'
+        item: 'diamond_helmet:1'
+        lore:
+        - Click to buy the Iron Kit.
+    21:
+      commands: kit gold <player>
+      permissions: votechests.shop
+      cost: 105
+      item:
+        name: '&6&lGold Kit &6&l<cost> coins'
+        item: 'diamond_helmet:1'
+        lore:
+        - Click to buy the Gold Kit.
+    22:
+      commands: kit lapis <player>
+      permissions: votechests.shop
+      cost: 150
+      item:
+        name: '&9&lLapis Kit &6&l<cost> coins'
+        item: 'diamond_helmet:1'
+        lore:
+        - Click to buy the Lapis Kit.
+    23:
+      commands: kit emerald <player>
+      permissions: votechests.shop
+      cost: 210
+      item:
+        name: '&a&lEmerald Kit &6&l<cost> coins'
+        item: 'diamond_helmet:1'
+        lore:
+        - Click to buy the Emerald Kit.
+    24:
+      commands: kit diamond <player>
+      permissions: votechests.shop
+      cost: 325
+      item:
+        name: '&b&lDiamomd Kit &6&l<cost> coins'
+        item: 'diamond_helmet:1'
+        lore:
+        - Click to buy the Diamomd Kit.
+    25:
+      commands: kit elite <player>
+      permissions: votechests.shop
+      cost: 450
+      item:
+        name: '&c&lElite Kit &6&l<cost> coins'
+        item: 'diamond_helmet:1'
+        lore:
+        - Click to buy the Elite Kit.
+    26:
+      commands: kit supreme <player>
+      permissions: votechests.shop
+      cost: 600
+      item:
+        name: '&e&lSupreme Kit &6&l<cost> coins'
+        item: 'diamond_helmet:1'
+        lore:
+        - Click to buy the Supreme Kit.
+    28:
+      commands: kit soul-crusher <player>
+      permissions: votechests.shop
+      cost: 700
+      item:
+        name: '&6&l&klll&c&lSOUL&6&l-&c&lCRUSHER&6&l&klll &6&l<cost> coins'
+        item: 'diamond_axe:1'
+        lore:
+        - Click to buy the Soul Crusher
+        - Sha 10, Unb X, Fire Aspect 5, Looting 80
+host: 'localhost'
+port: '3306'
+database: 'VOTING'
+user: 'root'
+pass: 'password'
