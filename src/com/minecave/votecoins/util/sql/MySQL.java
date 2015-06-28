@@ -62,6 +62,10 @@ public class MySQL {
 	}
 	
 	public ResultSet getAll(Table table) {
+		return getAll(table, "");
+	}
+	
+	public ResultSet getAll(Table table, String condition) {
 		ResultSet rs = null;
 		Statement statement = null;
 		boolean b;
@@ -74,7 +78,7 @@ public class MySQL {
 				statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + table + " (" + table.getNamesWithTypes() + ")");
 				
 				statement = connection.createStatement();
-				b = statement.execute("SELECT * FROM " + table);
+				b = statement.execute("SELECT * FROM " + table + " " + condition);
 				if (b)
 					return statement.getResultSet();
 				else

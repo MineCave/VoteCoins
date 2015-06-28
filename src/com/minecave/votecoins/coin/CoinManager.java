@@ -3,6 +3,7 @@ package com.minecave.votecoins.coin;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.SortedSet;
@@ -81,7 +82,7 @@ public class CoinManager {
 		new SQLNewPlayer(uuid, voteTracking) {
 			@Override
 			protected void done() {
-				new SQLSet(uuid, "date", new Date(System.currentTimeMillis()), voteTracking);
+				new SQLSet(uuid, "date", new Date(Calendar.getInstance().getTimeInMillis()), voteTracking);
 				new SQLSet(uuid, "service", vote.getServiceName(), voteTracking);
 			}
 		};
@@ -110,7 +111,7 @@ public class CoinManager {
 				new SQLNewPlayer(uuid, voteTracking) {
 					@Override
 					protected void done() {
-						new SQLSet(uuid, "date", new Date(System.currentTimeMillis()), voteTracking);
+						new SQLSet(uuid, "date", new Date(Calendar.getInstance().getTimeInMillis()), voteTracking);
 						new SQLSet(uuid, "service", "unknown", voteTracking);
 					}
 				};
@@ -135,7 +136,7 @@ public class CoinManager {
 				new SQLNewPlayer(uuid, voteTracking) {
 					@Override
 					protected void done() {
-						new SQLSet(uuid, "date", new Date(System.currentTimeMillis()), voteTracking);
+						new SQLSet(uuid, "date", new Date(Calendar.getInstance().getTimeInMillis()), voteTracking);
 						new SQLSet(uuid, "service", "unknown", voteTracking);
 					}
 				};
@@ -181,10 +182,10 @@ public class CoinManager {
 		try {
 		switch (type) {
 			case COINS:
-				set = MySQL.getInstance().getAll(plugin.getVotes());
+				set = MySQL.getInstance().getAll(plugin.getVotes(), "ORDER BY votecoins ASC");
 				Map<String, Integer> coins = Maps.newHashMap();
 				size = 0;
-				while (set.next() && size < 49) {
+				while (set.next() && size < 50) {
 					size++;
 					coins.put(set.getString("uuid"), set.getInt("votecoins"));
 				}
@@ -193,11 +194,11 @@ public class CoinManager {
 				set = MySQL.getInstance().getAll(plugin.getVoteTracking());
 				Map<String, Integer> day = Maps.newHashMap();
 				size = 0;
-				while (set.next() && size < 49) {
-					size++;
+				while (set.next() && size < 50) {
 					Date date = set.getDate("date");
-					if (date.getDay() != today.getDay() || date.getMonth() != today.getMonth())
+					if (date.getDay() != today.getDay() || date.getMonth() != today.getMonth() || date.getYear() != today.getYear())
 						continue;
+					size++;
 					String uuid = set.getString("uuid");
 					if (day.containsKey(uuid)) {
 						int amount = day.get(uuid);
@@ -212,11 +213,11 @@ public class CoinManager {
 				set = MySQL.getInstance().getAll(plugin.getVoteTracking());
 				Map<String, Integer> month = Maps.newHashMap();
 				size = 0;
-				while (set.next() && size < 49) {
-					size++;
+				while (set.next() && size < 50) {
 					Date date = set.getDate("date");
-					if (date.getMonth() != today.getMonth())
+					if (date.getMonth() != today.getMonth() || date.getYear() != today.getYear())
 						continue;
+					size++;
 					String uuid = set.getString("uuid");
 					if (month.containsKey(uuid)) {
 						int amount = month.get(uuid);
@@ -228,10 +229,10 @@ public class CoinManager {
 				}
 				return month;
 			case ALL_TIME:
-				set = MySQL.getInstance().getAll(plugin.getVotes());
+				set = MySQL.getInstance().getAll(plugin.getVotes(), "ORDER BY votes ASC");
 				Map<String, Integer> allTime = Maps.newHashMap();
 				size = 0;
-				while (set.next() && size < 49) {
+				while (set.next() && size < 50) {
 					size++;
 					allTime.put(set.getString("uuid"), set.getInt("votes"));
 				}
