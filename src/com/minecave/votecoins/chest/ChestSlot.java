@@ -1,6 +1,7 @@
 package com.minecave.votecoins.chest;
 
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.google.common.collect.Maps;
 import com.minecave.votecoins.Main;
 import com.minecave.votecoins.coin.VoteType;
 import com.minecave.votecoins.util.sql.SQLGet;
@@ -47,7 +49,12 @@ public class ChestSlot {
 			}
 		}
 		
-		new SQLNewPlayer(player.getUniqueId().toString(), votes) {
+		Map<String, String> values = Maps.newHashMap();
+		values.put("<uuid>", "'" + player.getUniqueId().toString() + "'");
+		values.put("<votecoins>", "0");
+		values.put("<votes>", "0");
+		
+		new SQLNewPlayer(player.getUniqueId().toString(), votes, values, false) {
 			@Override
 			protected void done() {
 				new SQLGet(player.getUniqueId().toString(), "votecoins", votes) {

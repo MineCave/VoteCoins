@@ -22,8 +22,8 @@ public class Table {
 	static {
 		Map<String, String> map = Maps.newHashMap();
 		map.put("uuid varchar(200)", "<uuid>");
-		map.put("votecoins int(20)", "0");
-		map.put("votes int(20)", "0");
+		map.put("votecoins int(20)", "<votecoins>");
+		map.put("votes int(20)", "<votes>");
 		VOTES = new Table("VOTES", map);
 	}
 	
@@ -31,7 +31,7 @@ public class Table {
 		Map<String, String> map = Maps.newHashMap();
 		map.put("uuid varchar(200)", "<uuid>");
 		map.put("date date", "<current date>");
-		map.put("service varchar(200)", "0");
+		map.put("service varchar(200)", "<service>");
 		VOTE_TRACKING = new Table("VOTE_TRACKING", map);
 	}
 	

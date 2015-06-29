@@ -42,7 +42,12 @@ public class CoinManager {
 	}
 	
 	public void sendMessage(final Player player, final String message, final Table votes) {
-		new SQLNewPlayer(player.getUniqueId().toString(), votes) {
+		Map<String, String> values = Maps.newHashMap();
+		values.put("<uuid>", "'" + player.getUniqueId().toString() + "'");
+		values.put("<votecoins>", "0");
+		values.put("<votes>", "0");
+		
+		new SQLNewPlayer(player.getUniqueId().toString(), votes, values, false) {
 			@Override
 			protected void done() {
 				new SQLGet(player.getUniqueId().toString(), "votecoins", votes) {
@@ -59,7 +64,17 @@ public class CoinManager {
 	public void add(Player player, final Vote vote, final Table votes, final Table voteTracking) {
 		final String uuid = player.getUniqueId().toString();
 		
-		new SQLNewPlayer(uuid, votes) {
+		Map<String, String> values = Maps.newHashMap();
+		values.put("<uuid>", "'" + uuid + "'");
+		values.put("<votecoins>", "0");
+		values.put("<votes>", "0");
+		
+		Map<String, String> trackingValues = Maps.newHashMap();
+		trackingValues.put("<uuid>", "'" + uuid + "'");
+		trackingValues.put("<current date>", "'" + new Date(Calendar.getInstance().getTimeInMillis()) + "'");
+		trackingValues.put("<service>", "'" + vote.getServiceName() + "'");
+		
+		new SQLNewPlayer(uuid, votes, values, false) {
 			@Override
 			protected void done() {
 				new SQLGet(uuid, "votecoins", votes) {
@@ -79,13 +94,7 @@ public class CoinManager {
 				};
 			}
 		};
-		new SQLNewPlayer(uuid, voteTracking) {
-			@Override
-			protected void done() {
-				new SQLSet(uuid, "date", new Date(Calendar.getInstance().getTimeInMillis()), voteTracking);
-				new SQLSet(uuid, "service", vote.getServiceName(), voteTracking);
-			}
-		};
+		new SQLNewPlayer(uuid, voteTracking, trackingValues, true);
 	}
 	
 	public void add(final String uuid, final int amount, VoteType type, final Table votes, final Table voteTracking) {
@@ -93,9 +102,23 @@ public class CoinManager {
 	}
 	
 	public void add(final String uuid, final int amount, VoteType type, final Table votes, final Table voteTracking, final boolean reward) {
+		add(uuid, amount, type, votes, voteTracking, reward, "'unknown'");
+	}
+	
+	public void add(final String uuid, final int amount, VoteType type, final Table votes, final Table voteTracking, final boolean reward, String service) {
+		Map<String, String> values = Maps.newHashMap();
+		values.put("<uuid>", "'" + uuid + "'");
+		values.put("<votecoins>", "0");
+		values.put("<votes>", "0");
+		
+		Map<String, String> trackingValues = Maps.newHashMap();
+		trackingValues.put("<uuid>", "'" + uuid + "'");
+		trackingValues.put("<current date>", "'" + new Date(Calendar.getInstance().getTimeInMillis()) + "'");
+		trackingValues.put("<service>", service);
+		
 		switch (type) {
 		case COINS:
-			new SQLNewPlayer(uuid, votes) {
+			new SQLNewPlayer(uuid, votes, values, false) {
 				@Override
 				protected void done() {
 					new SQLGet(uuid, "votecoins", votes) {
@@ -108,17 +131,11 @@ public class CoinManager {
 				}
 			};
 			for (int i = 0; i < amount; i++) {
-				new SQLNewPlayer(uuid, voteTracking) {
-					@Override
-					protected void done() {
-						new SQLSet(uuid, "date", new Date(Calendar.getInstance().getTimeInMillis()), voteTracking);
-						new SQLSet(uuid, "service", "unknown", voteTracking);
-					}
-				};
+				new SQLNewPlayer(uuid, voteTracking, trackingValues, true);
 			}
 			break;
 		default:
-			new SQLNewPlayer(uuid, votes) {
+			new SQLNewPlayer(uuid, votes, values, false) {
 				@Override
 				protected void done() {
 					new SQLGet(uuid, "votes", votes) {
@@ -133,13 +150,7 @@ public class CoinManager {
 				}
 			};
 			for (int i = 0; i < amount; i++) {
-				new SQLNewPlayer(uuid, voteTracking) {
-					@Override
-					protected void done() {
-						new SQLSet(uuid, "date", new Date(Calendar.getInstance().getTimeInMillis()), voteTracking);
-						new SQLSet(uuid, "service", "unknown", voteTracking);
-					}
-				};
+				new SQLNewPlayer(uuid, voteTracking, trackingValues, true);
 			}
 			break;
 		}

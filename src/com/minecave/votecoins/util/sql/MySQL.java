@@ -1,14 +1,15 @@
 package com.minecave.votecoins.util.sql;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 import java.util.logging.Level;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 
 import com.minecave.votecoins.Main;
@@ -130,13 +131,14 @@ public class MySQL {
 		}
 	}
 	
-	public void makeNewPlayer(String uuid, Table table) {
-		makeNewPlayer(uuid, table.getDelimitedValues().
-				replaceAll("<uuid>", "'" + uuid + "'").
-				replaceAll("<current date>", "'" + new Date(System.currentTimeMillis()) + "'"), table);
+	public void makeNewPlayer(String uuid, Table table, Map<String, String> defaults, boolean override) {
+		String values = table.getDelimitedValues();
+		for (Map.Entry<String, String> entry : defaults.entrySet())
+			values = StringUtils.replace(values, entry.getKey(), entry.getValue());
+		makeNewPlayer(uuid, values, table, override);
 	}
 	
-	public void makeNewPlayer(String uuid, String values, Table table) {
+	public void makeNewPlayer(String uuid, String values, Table table, boolean forceNew) {
 		Statement statement = null;
 		ResultSet rs = null;
 		int tryTime = 0;
@@ -146,9 +148,13 @@ public class MySQL {
 					openConnection();
 				statement = connection.createStatement();
 				statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + table + " (" + table.getNamesWithTypes() + ")");
-				rs = statement.executeQuery("SELECT * FROM " + table + " WHERE uuid = '" + uuid + "' LIMIT 1");
-				if (!rs.next())
+				if (forceNew) {
 					statement.execute("INSERT INTO " + table + " (" + table.getStatNames() + ") VALUES (" + values + ")");
+				} else {
+					rs = statement.executeQuery("SELECT * FROM " + table + " WHERE uuid = '" + uuid + "' LIMIT 1");
+					if (!rs.next())
+						statement.execute("INSERT INTO " + table + " (" + table.getStatNames() + ") VALUES (" + values + ")");
+				}
 			} catch (SQLException e) {
 				if (tryTime == 1) {
 					openConnection();
