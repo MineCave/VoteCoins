@@ -193,7 +193,7 @@ public class CoinManager {
 		try {
 		switch (type) {
 			case COINS:
-				set = MySQL.getInstance().getAll(plugin.getVotes(), "ORDER BY votecoins ASC");
+				set = MySQL.getInstance().getAll(plugin.getVotes(), "ORDER BY votecoins DESC");
 				Map<String, Integer> coins = Maps.newHashMap();
 				size = 0;
 				while (set.next() && size < 50) {
@@ -240,7 +240,7 @@ public class CoinManager {
 				}
 				return month;
 			case ALL_TIME:
-				set = MySQL.getInstance().getAll(plugin.getVotes(), "ORDER BY votes ASC");
+				set = MySQL.getInstance().getAll(plugin.getVotes(), "ORDER BY votes DESC");
 				Map<String, Integer> allTime = Maps.newHashMap();
 				size = 0;
 				while (set.next() && size < 50) {
