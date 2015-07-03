@@ -68,7 +68,6 @@ public class ChestSlot {
 
 						main.getCoins().add(player.getUniqueId().toString(), 0 - cost, VoteType.COINS, votes, voteTracking);
 						main.getCoins().sendMessage(player, main.getPurchaseMessage(), votes);
-						main.getCoins().sendMessage(player, main.getPurchaseMessage(), votes);
 						new BukkitRunnable() {
 							@Override
 							public void run() {

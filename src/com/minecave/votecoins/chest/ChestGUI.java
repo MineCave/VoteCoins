@@ -89,6 +89,22 @@ public class ChestGUI implements Listener {
 		}
 	}
 	
+	private boolean isSimilar(ItemStack[] contents1, ItemStack[] contents2) {
+		if (contents1.length != contents2.length)
+			return false;
+		
+		for (int i = 0; i < contents1.length; i++) {
+			if (contents1[i] == null && contents2[i] == null)
+				continue;
+			if ((contents1[i] == null && contents2[i] != null) || (contents1[i] != null && contents2[i] == null))
+				return false;
+			if (!contents1[i].isSimilar(contents2[i]))
+				return false;
+		}
+		
+		return true;
+	}
+	
 	/* ========== Events from here on out. ========== */
 	
 	@EventHandler (priority = EventPriority.HIGHEST)
@@ -109,7 +125,7 @@ public class ChestGUI implements Listener {
 			}
 		}.runTaskLater(plugin, 1l);
 		
-		if (!event.getClickedInventory().equals(event.getView().getTopInventory()))
+		if (!isSimilar(event.getClickedInventory().getContents(), event.getView().getTopInventory().getContents()))
 			return;
 		
 		ChestSlot slot = getChestSlot(event.getSlot());
