@@ -204,12 +204,10 @@ public class CoinManager {
 			case DAY:
 				set = MySQL.getInstance().getAll(plugin.getVoteTracking());
 				Map<String, Integer> day = Maps.newHashMap();
-				size = 0;
-				while (set.next() && size < 50) {
+				while (set.next()) {
 					Date date = set.getDate("date");
 					if (date.getDay() != today.getDay() || date.getMonth() != today.getMonth() || date.getYear() != today.getYear())
 						continue;
-					size++;
 					String uuid = set.getString("uuid");
 					if (day.containsKey(uuid)) {
 						int amount = day.get(uuid);
@@ -223,12 +221,10 @@ public class CoinManager {
 			case MONTH:
 				set = MySQL.getInstance().getAll(plugin.getVoteTracking());
 				Map<String, Integer> month = Maps.newHashMap();
-				size = 0;
-				while (set.next() && size < 50) {
+				while (set.next()) {
 					Date date = set.getDate("date");
 					if (date.getMonth() != today.getMonth() || date.getYear() != today.getYear())
 						continue;
-					size++;
 					String uuid = set.getString("uuid");
 					if (month.containsKey(uuid)) {
 						int amount = month.get(uuid);
