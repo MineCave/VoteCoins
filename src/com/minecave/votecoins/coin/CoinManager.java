@@ -184,10 +184,9 @@ public class CoinManager {
 		}.runTaskTimerAsynchronously(plugin, 20l, interval);
 	}
 	
-	@SuppressWarnings("deprecation")
 	private Map<String, Integer> getTop(VoteType type, Object toBeNull) {
 		ResultSet set;
-		Date today = new Date(System.currentTimeMillis());
+		Calendar today = Calendar.getInstance();
 		int size;
 		
 		try {
@@ -205,8 +204,12 @@ public class CoinManager {
 				set = MySQL.getInstance().getAll(plugin.getVoteTracking());
 				Map<String, Integer> day = Maps.newHashMap();
 				while (set.next()) {
-					Date date = set.getDate("date");
-					if (date.getDay() != today.getDay() || date.getMonth() != today.getMonth() || date.getYear() != today.getYear())
+					Date dateDate = set.getDate("date");
+					Calendar date = Calendar.getInstance();
+					date.setTime(dateDate);
+					if (date.get(Calendar.DAY_OF_MONTH) != today.get(Calendar.DAY_OF_MONTH)
+							|| date.get(Calendar.MONTH) != today.get(Calendar.MONTH)
+							|| date.get(Calendar.YEAR) != today.get(Calendar.YEAR))
 						continue;
 					String uuid = set.getString("uuid");
 					if (day.containsKey(uuid)) {
@@ -222,8 +225,11 @@ public class CoinManager {
 				set = MySQL.getInstance().getAll(plugin.getVoteTracking());
 				Map<String, Integer> month = Maps.newHashMap();
 				while (set.next()) {
-					Date date = set.getDate("date");
-					if (date.getMonth() != today.getMonth() || date.getYear() != today.getYear())
+					Date dateDate = set.getDate("date");
+					Calendar date = Calendar.getInstance();
+					date.setTime(dateDate);
+					if (date.get(Calendar.MONTH) != today.get(Calendar.MONTH)
+							|| date.get(Calendar.YEAR) != today.get(Calendar.YEAR))
 						continue;
 					String uuid = set.getString("uuid");
 					if (month.containsKey(uuid)) {
