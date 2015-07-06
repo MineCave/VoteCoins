@@ -188,6 +188,8 @@ public class CoinManager {
 		ResultSet set;
 		Calendar today = Calendar.getInstance();
 		int size;
+		int dayNum, monthNum, yearNum;
+		Calendar date = Calendar.getInstance();
 		
 		try {
 		switch (type) {
@@ -203,13 +205,14 @@ public class CoinManager {
 			case DAY:
 				set = MySQL.getInstance().getAll(plugin.getVoteTracking());
 				Map<String, Integer> day = Maps.newHashMap();
+				dayNum = today.get(Calendar.DAY_OF_MONTH);
+				monthNum = today.get(Calendar.MONTH);
+				yearNum = today.get(Calendar.YEAR);
 				while (set.next()) {
-					Date dateDate = set.getDate("date");
-					Calendar date = Calendar.getInstance();
-					date.setTime(dateDate);
-					if (date.get(Calendar.DAY_OF_MONTH) != today.get(Calendar.DAY_OF_MONTH)
-							|| date.get(Calendar.MONTH) != today.get(Calendar.MONTH)
-							|| date.get(Calendar.YEAR) != today.get(Calendar.YEAR))
+					date.setTime(set.getDate("date"));
+					if (date.get(Calendar.DAY_OF_MONTH) != dayNum
+							|| date.get(Calendar.MONTH) != monthNum
+							|| date.get(Calendar.YEAR) != yearNum)
 						continue;
 					String uuid = set.getString("uuid");
 					if (day.containsKey(uuid)) {
@@ -224,12 +227,12 @@ public class CoinManager {
 			case MONTH:
 				set = MySQL.getInstance().getAll(plugin.getVoteTracking());
 				Map<String, Integer> month = Maps.newHashMap();
+				monthNum = today.get(Calendar.MONTH);
+				yearNum = today.get(Calendar.YEAR);
 				while (set.next()) {
-					Date dateDate = set.getDate("date");
-					Calendar date = Calendar.getInstance();
-					date.setTime(dateDate);
-					if (date.get(Calendar.MONTH) != today.get(Calendar.MONTH)
-							|| date.get(Calendar.YEAR) != today.get(Calendar.YEAR))
+					date.setTime(set.getDate("date"));
+					if (date.get(Calendar.MONTH) != monthNum
+							|| date.get(Calendar.YEAR) != yearNum)
 						continue;
 					String uuid = set.getString("uuid");
 					if (month.containsKey(uuid)) {
